@@ -1,26 +1,28 @@
-import React from 'react';
+import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import React from 'react'
 
-class Register extends React.Component {
+class RegisterPage extends React.Component {
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    });
+  };
 
-  constructor(props){
-    super(props);
-    this.state = {
-      name : this.props.name,
-      color: "black"
-    }
-    this.setColor = this.setColor.bind(this);
-    this.revertColor = this.revertColor.bind(this);
-  }
-
-  setColor(){
-      this.setState({color:"blue"});
-  }
-  revertColor(){
-    this.setState({color:"black"});
-  }
   render() {
-    return <h1 onMouseEnter={this.setColor} onMouseLeave={this.revertColor} style={{color:this.state.color}}>Hello {this.props.name}</h1>;
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <main class="pa4 black-80">
+      <form class="measure center">
+      <p>hi</p>
+      </form>
+      </main>
+    );
   }
 }
+
+const Register = Form.create({ name: 'normal_register' })(RegisterPage);
 
 export default Register;

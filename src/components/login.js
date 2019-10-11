@@ -1,6 +1,8 @@
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import React from 'react'
-class NormalLoginForm extends React.Component {
+import { runInContext } from 'vm';
+
+class LoginPage extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -13,48 +15,53 @@ class NormalLoginForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-        <article class="mw5 center bg-white shadow-5 br3 pa3 pa4-ns mv3 ba b--black-10">
+      <main class="pa4 black-80">
+      <form class="measure center">
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item>
           {getFieldDecorator('username', {
-            rules: [{ required: true, message: 'Please input your username!' }],
+            rules: [{ required: true, message: 'Username cannot be empty.' }],
           })(
             <Input
-              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={<Icon type="user"/>}
               placeholder="Username"
             />,
           )}
         </Form.Item>
         <Form.Item>
           {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }],
+            rules: [{ required: true, message: 'Password cannot be empty' }],
           })(
             <Input
-              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={<Icon type="lock"/>}
               type="password"
               placeholder="Password"
             />,
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator('remember', {
-            valuePropName: 'checked',
-            initialValue: true,
-          })(<Checkbox>Remember me</Checkbox>)}
-          <a className="login-form-forgot" href="">
-            Forgot password
+          <a className="loginForgotPassword" href="">
+            Forgotten password?
           </a>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <br></br>
+          <Button type="primary" htmlType="submit" className="loginSubmit">
             Log in
           </Button>
-          Or <a href="">register now!</a>
+          <br></br>
+          <a href="">Register now!</a>
+          
         </Form.Item>
       </Form>
-      </article>
+     
+      </form>
+      </main>
     );
   }
 }
 
-const Login = Form.create({ name: 'normal_login' })(NormalLoginForm);
+const Login = Form.create({ name: 'normal_login' })(LoginPage);
 
 export default Login;
+
+//THE REGISTER BUTTON SHOULD TELL THE APP TO CHANGE STATE FROM:
+// ./login    to  ./register

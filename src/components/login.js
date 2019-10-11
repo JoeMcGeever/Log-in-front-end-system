@@ -1,6 +1,6 @@
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import React from 'react'
-import { runInContext } from 'vm';
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
 class LoginPage extends React.Component {
   handleSubmit = e => {
@@ -48,8 +48,9 @@ class LoginPage extends React.Component {
             Log in
           </Button>
           <br></br>
-          <a href="">Register now!</a>
-          
+          <div>
+          <Link to="/register">Register Now!</Link>
+          </div>
         </Form.Item>
       </Form>
      

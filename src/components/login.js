@@ -1,6 +1,7 @@
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button } from 'antd';
 import React from 'react'
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import 'tachyons';
 
 class LoginPage extends React.Component {
   handleSubmit = e => {
@@ -15,16 +16,14 @@ class LoginPage extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <main class="pa4 black-80">
-      <form class="measure center">
+      <article class="mw5 center bg-white br3 pa3 pa4-ns mv3 ba b--black-10">
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item>
           {getFieldDecorator('username', {
             rules: [{ required: true, message: 'Username cannot be empty.' }],
           })(
             <Input
-              prefix={<Icon type="user"/>}
-              placeholder="Username"
+              prefix={<Icon type="user"/>} placeholder="Username"
             />,
           )}
         </Form.Item>
@@ -54,8 +53,7 @@ class LoginPage extends React.Component {
         </Form.Item>
       </Form>
      
-      </form>
-      </main>
+      </article>
     );
   }
 }

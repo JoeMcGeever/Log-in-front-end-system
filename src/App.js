@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { Route, BrowserRouter as Router } from 'react-router-dom'
 import Login from './components/login'
 import Register from './components/register'
+import googleAuth from './components/google-auth'
 
 
 const routing = (
@@ -10,6 +11,7 @@ const routing = (
     <div>
       <Route exact path="/" component={Login} />
       <Route path="/register" component={Register} />
+      <Route path="/google-auth" component= {googleAuth} />
     </div>
   </Router>
 )

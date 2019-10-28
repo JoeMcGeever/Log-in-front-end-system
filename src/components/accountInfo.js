@@ -2,10 +2,7 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import React from 'react'
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
-class RegisterPage extends React.Component {
-
-
-
+class AccountInfoPage extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -22,14 +19,14 @@ class RegisterPage extends React.Component {
       <form class="measure center">
       <p>hi</p>
       <div>
-          <Link to="/">Already have an account?</Link>
-          </div>
+          <Link to="/">Log out</Link>
+      </div>
       </form>
       </main>
     );
   }
 }
 
-const Register = Form.create({ name: 'normal_register' })(RegisterPage);
+const AccountInfo = Form.create({ name: 'normal_register' })(AccountInfoPage);
 
-export default Register;
+export default AccountInfo;

@@ -16,17 +16,21 @@ export class LoginPage extends React.Component {
 
   checkResponse = (data) => {
     if(this.state.loginSucessfully){
+      console.log(data)
+      sessionStorage.setItem("token", data)
+      //SET SESSION STORAGE ABOVE^
       this.props.form.resetFields();
       this.setState({
       showSuccess:true,
       showError : false
+      
       //NEED TO ROUTE AWAY IF SUCCESSFUL LOGIN TO MAIN
       });
     }else{
       //handle errors
       this.setState({
         
-      errorMessage: data.message,
+      errorMessage: data,
       showSuccess:false,
       showError : true,
       responseStatus: "error"
@@ -54,19 +58,21 @@ export class LoginPage extends React.Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({values})
-      }).then(res => {
+      }).then(res =>{
         if(res.ok){
           this.setState({loginSucessfully:true})
           console.log("Correct")
         } else{
+          console.log("Incorrect")
           this.setState({
+          loginSucessfully:false,
           addedSucessfully:false,
           errorCode: res.status
         })
       };
 
-        return res.json()
-      }).then(data => this.checkResponse(data))
+      return res.text() //not sure about this return
+      }).then(res => this.checkResponse(res))
     }
   });
   };

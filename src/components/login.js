@@ -24,7 +24,7 @@ export class LoginPage extends React.Component {
       showSuccess:true,
       showError : false
       
-      //NEED TO ROUTE AWAY IF SUCCESSFUL LOGIN TO MAIN
+      //NEED TO ROUTE AWAY IF SUCCESSFUL LOGIN TO MAIN this.history.pushState(null, 'login');... something like this
       });
     }else{
       //handle errors

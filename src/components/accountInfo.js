@@ -12,6 +12,8 @@
 
 import React from 'react';
 import {Form, Input, Button, Icon} from 'antd';
+import { Link, Redirect} from 'react-router-dom' //importing redirect to take to main page
+
 
 export class HomeGrid extends React.Component {
 
@@ -24,10 +26,32 @@ export class HomeGrid extends React.Component {
             showError: false, //if should we show an error feedback message after adding a user
             errorCode: 400, //to save the errorCode we recieved from the api server
             errorMessage: "", //the error message to display to the user after server rejects action
-            userDetails: {}
+            userDetails: {},
+            redirect: false,
+            updatedSucessfully: false
           };
     
     }
+
+    checkResponse = (data) => {
+        console.log("before incorrect")
+        if(this.state.loginSucessfully){
+          console.log(data)
+          sessionStorage.removeItem("token");
+          //SET SESSION STORAGE ABOVE^
+          this.props.form.resetFields();
+        }else{
+          //handle errors
+          console.log(data)
+          this.setState({
+          redirect : true,
+          errorMessage: data,
+          isLoaded:false,
+          showError : true,
+          responseStatus: "error"
+          });
+        } 
+      }
 
     
     componentDidMount(){
@@ -52,11 +76,9 @@ export class HomeGrid extends React.Component {
             // instead of a catch() block so that we don't swallow
             // exceptions from actual bugs in components.
             (error) => {
-                console.log("ERROR HERE")
-                console.log("CHANGE STATE OF ITEMS TO DISPLAY THE ERROR HERE")
-            this.setState({
-                isLoaded: true,
-                error : error
+                console.log(error)
+                this.setState({
+                redirect: true,
             });
             }
         )
@@ -83,17 +105,42 @@ export class HomeGrid extends React.Component {
                 if(values.profileImageURL === undefined) values.profileImageURL = this.state.userDetails.profileImageURL
                 console.log(values)
                 //if any of these are undefined -> set to be the default sent within the state {userDetails}
-                //then send an UPDATE request to api with all of these parameters in
-
-        this.setState({
-            editMode: false
-        });
+                //then send an PUT request to api with all of these parameters in
+                fetch('http://localhost:5000/api/v1.0/home/updateInfo', {
+                    method: 'PUT',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Authorization': 'Bearer ' + sessionStorage.token,
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({values})
+                  }).then(res =>{
+                    if(res.ok){
+                      this.setState({
+                          updatedSucessfully:true,
+                          editMode: false
+                        })
+                      console.log("Success")
+                      return true //update success
+                    } else{
+                      console.log("Fail")
+                      this.setState({
+                      editMode: false,
+                      updatedSucessfully:false,
+                      errorCode: res.status
+                      })
+                      return false //update failed
+                    };
+                  }).then(res => this.checkResponse(res))
     }}
     )};
 
     render() {
     let details = this.state.userDetails
     const { getFieldDecorator } = this.props.form;
+    if(this.state.redirect === true){
+        return <Redirect to={{pathname: '/'}}/>
+      }
       return <> 
       <Form onSubmit={this.handleSubmit}>
       <h4>

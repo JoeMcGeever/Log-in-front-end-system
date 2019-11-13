@@ -27,7 +27,6 @@ export class HomeGrid extends React.Component {
             userDetails: {}
           };
     
-        this.clickItem = this.clickItem.bind(this);
     }
 
     
@@ -72,77 +71,108 @@ export class HomeGrid extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        console.log(e)
-      };
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if(!err){
+                console.log("Recieved:")
+                if(values.username === undefined) values.username = this.state.userDetails.username
+                if(values.firstName === undefined) values.firstName = this.state.userDetails.firstName
+                if(values.lastName === undefined) values.lastName = this.state.userDetails.lastName
+                if(values.email === undefined) values.email = this.state.userDetails.email
+                if(values.about === undefined) values.about = this.state.userDetails.about
+                if(values.countryID === undefined) values.countryID = this.state.userDetails.countryID
+                if(values.profileImageURL === undefined) values.profileImageURL = this.state.userDetails.profileImageURL
+                console.log(values)
+                //if any of these are undefined -> set to be the default sent within the state {userDetails}
+                //then send an UPDATE request to api with all of these parameters in
 
-    clickItem(id){
-        console.log("article with id:" + id + " was clicked");
-    }
+        this.setState({
+            editMode: false
+        });
+    }}
+    )};
+
     render() {
     let details = this.state.userDetails
-    //  const about = details.about
-    // console.log(details.about)
-    // console.log(about)
+    const { getFieldDecorator } = this.props.form;
       return <> 
       <Form onSubmit={this.handleSubmit}>
       <h4>
             Username:
       </h4>
-      <Form.Item >
-           {this.state.editMode ? <Input value={details.username} ></Input> :null}
-           {!this.state.editMode ? <p> {details.username} </p> :null}
-      </Form.Item>
+      {!this.state.editMode ? <p> {details.username} </p> :null}
+        {this.state.editMode ? 
+           <Form.Item >
+           {getFieldDecorator('username')(<Input placeholder={details.username} ></Input>)} 
+           </Form.Item>
+        :null}
       <h4>
             First Name:
       </h4>
-      <Form.Item >
-           {this.state.editMode ? <Input value={details.firstName} ></Input> :null}
-           {!this.state.editMode ? <p> {details.firstName} </p> :null}
-      </Form.Item>
+      {!this.state.editMode ? <p> {details.firstName} </p> :null}
+           {this.state.editMode ?
+           <Form.Item >
+            {getFieldDecorator('firstName')(<Input placeholder={details.firstName} ></Input>)} 
+            </Form.Item>
+            :null}
       <h4>
             Last Name:
       </h4>
-      <Form.Item >
-           {this.state.editMode ? <Input value={details.lastName} ></Input> :null}
-           {!this.state.editMode ? <p> {details.lastName} </p> :null}
-      </Form.Item>
+      {!this.state.editMode ? <p> {details.lastName} </p> :null}
+        {this.state.editMode ?
+           <Form.Item >
+            {getFieldDecorator('lastName')(<Input placeholder={details.lastName} ></Input>)} 
+            </Form.Item>
+        :null}
+
       <h4>
             Email:
       </h4>
-      <Form.Item >
-           {this.state.editMode ? <Input value={details.email} ></Input> :null}
-           {!this.state.editMode ? <p> {details.email} </p> :null}
-      </Form.Item>
+      {!this.state.editMode ? <p> {details.email} </p> :null}
+      {this.state.editMode ?
+           <Form.Item >
+            {getFieldDecorator('email')(<Input placeholder={details.email} ></Input>)} 
+            </Form.Item>
+        :null}
       <h4>
             About:
       </h4>
-      <Form.Item >
-           {this.state.editMode ? <Input value={details.about} ></Input> :null}
-           {!this.state.editMode ? <p> {details.about} </p> :null}
-      </Form.Item>
+      {!this.state.editMode ? <p> {details.about} </p> :null}
+      {this.state.editMode ?
+           <Form.Item >
+            {getFieldDecorator('about')(<Input placeholder={details.about} ></Input>)} 
+            </Form.Item>
+        :null}
       <h4>
             Country (ID):
       </h4>
-      <Form.Item >
-           {this.state.editMode ? <Input value={details.countryID} ></Input> :null}
-           {!this.state.editMode ? <p> {details.countryID} </p> :null}
-      </Form.Item>
+      {!this.state.editMode ? <p> {details.countryID} </p> :null}
+      {this.state.editMode ?
+           <Form.Item >
+            {getFieldDecorator('countryID')(<Input placeholder={details.countryID} ></Input>)} 
+            </Form.Item>
+        :null}
       <h4>
             Profile Image URL:
       </h4>
-      <Form.Item >
-           {this.state.editMode ? <Input value={details.profileImageURL} ></Input> :null}
-           {!this.state.editMode ? <p> {details.profileImageURL} </p> :null}
-      </Form.Item>
+      {!this.state.editMode ? <p> {details.profileImageURL} </p> :null}
+      {this.state.editMode ?
+           <Form.Item >
+            {getFieldDecorator('profileImageURL')(<Input placeholder={details.profileImageURL} ></Input>)} 
+            </Form.Item>
+        :null}
       <h4>
             Date Registered: {details.dateRegistered}
       </h4>
       <Form.Item>
+        {this.state.editMode ?
         <Button type="primary" htmlType="submit" className="changeSubmit">
             Confirm changes
         </Button>
+        :null}
       </Form.Item>
       </Form>
+
+      <br></br>
         {this.state.editMode ?
         <Button type="primary" htmlType="submit" className="enterEdit" onClick={this.enterEditMode}>
             Cancel

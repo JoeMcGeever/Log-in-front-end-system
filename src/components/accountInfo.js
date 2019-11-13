@@ -11,29 +11,37 @@
 //light / dark theme part
 
 import React from 'react';
-import {Col, Row} from 'antd';
-import userDetailCard from './userDetail';
+import {Col, Row, Form, Input} from 'antd';
 
 export class HomeGrid extends React.Component {
 
     constructor(props){
         super(props);
-        
+        //console.log("HAHAHAHAA")
+       // console.log(props)
+        // this.state = {
+        //     items : []
+        // }
         this.state = {
-            items : []
-        }
-
+            isLoaded: false, //if the user is added successfully
+            showSuccess: false, //if should we show a successful feedback message after adding a user
+            showError: false, //if should we show an error feedback message after adding a user
+            errorCode: 400, //to save the errorCode we recieved from the api server
+            errorMessage: "", //the error message to display to the user after server rejects action
+            userDetails: {}
+          };
+    
         this.clickItem = this.clickItem.bind(this);
     }
 
-    state = {
-        isLoaded: false, //if the user is added successfully
-        showSuccess: false, //if should we show a successful feedback message after adding a user
-        showError: false, //if should we show an error feedback message after adding a user
-        errorCode: 400, //to save the errorCode we recieved from the api server
-        errorMessage: "", //the error message to display to the user after server rejects action
-        items : {}
-      };
+    // state = {
+    //     isLoaded: false, //if the user is added successfully
+    //     showSuccess: false, //if should we show a successful feedback message after adding a user
+    //     showError: false, //if should we show an error feedback message after adding a user
+    //     errorCode: 400, //to save the errorCode we recieved from the api server
+    //     errorMessage: "", //the error message to display to the user after server rejects action
+    //     userDetails: {about: 'nothing'}
+    //   };
 
     
     componentDidMount(){
@@ -47,10 +55,11 @@ export class HomeGrid extends React.Component {
         .then(res => res.json())
         .then(
             (result) => {
-                console.log(result)
+                console.log(result[0])
             this.setState({
                 isLoaded: true,
-                items: result
+                // userDetails: result[0]
+                userDetails: result[0]
             });
             },
             // Note: it's important to handle errors here
@@ -61,7 +70,7 @@ export class HomeGrid extends React.Component {
                 console.log("CHANGE STATE OF ITEMS TO DISPLAY THE ERROR HERE")
             this.setState({
                 isLoaded: true,
-                error
+                error : error
             });
             }
         )
@@ -70,78 +79,38 @@ export class HomeGrid extends React.Component {
     clickItem(id){
         console.log("article with id:" + id + " was clicked");
     }
-    //this is a functional component to represent each row
-    oneRow(articles, rowNumber){
-
-        //first we need to go through each column in the grid
-        //map each article to Col and inside of it our OktobCard component
-        //this way we can compose our whole grid
-       let row = articles.map((element, index) => {
-
-        //render the column, if it should have a card render a crad inside it, othewerwise do not render anything
-        return <Col span={6} key={index}> 
-            {element !== null ? (
-            <userDetailCard id={element.id}  title={element.title} description={element.description}
-                likes={element.likes} comments={element.comments} selected={element.liked} 
-                liked={element.liked} pinned={element.pinned}
-                imgURL = {element.imgURL} clicked={this.clickItem} />) : null}
-        </Col> 
-        
-        
-       }
-            
-        );
-
-        //after we go throw wach col inside the row compose the whole row
-        return <div key={rowNumber}>
-            <Row type="flex" justify="center" >
-                {row}
-            </Row>
-            <br/>
-        </div>
-        
-        
-    }
     render() {
 
-        //in this array we will save rows, one item per row
-        let allRows = [];
-        //count how many articles we have so far
-        let counter = 0;
-
-        let rowNumber = 0;
-
-        //iterate through all the articles in the json data
-        while(counter < this.state.items.length){
-
-            //initialise the array to store articles for each new row
-            let articlesPerRow = [];
-            
-            //send each three articles to separate row
-            for(let i=0; i < 3; i++){
-
-                //make sure we do not overflow the array
-                if(counter < this.state.items.length)
-                    articlesPerRow.push(this.state.items[counter]);
-                else
-                    articlesPerRow.push(null);
-
-                counter++;
-
-            }
-            
-            rowNumber++;
-
-            //keep adding rows until we finish the rows
-            allRows.push(this.oneRow(articlesPerRow, rowNumber));
-            
-        }
-        //now we have composed columns inside rows, and then rows inside grid,
-        //now render the whole grid
-      return <>
-        {allRows}
-      </>;
-     
+    let details = this.state.userDetails
+    //  const about = details.about
+     console.log(details.about)
+    // console.log(about)
+      return <> 
+      <Form.Item >
+          <Input value={details.about} ></Input>
+      </Form.Item>
+      <Form.Item >
+          <Input value={details.countryID} ></Input>
+      </Form.Item>
+      <Form.Item >
+          <Input value={details.username} ></Input>
+      </Form.Item>
+      <Form.Item >
+          <Input value={details} ></Input>
+      </Form.Item>
+      <Form.Item >
+          <Input value={details} ></Input>
+      </Form.Item>
+      <Form.Item >
+          <Input value={details} ></Input>
+      </Form.Item>
+      <Form.Item >
+          <Input value={details} ></Input>
+      </Form.Item>
+      <Form.Item >
+          <Input value={details} ></Input>
+      </Form.Item>
+      </>
     }
   }
   

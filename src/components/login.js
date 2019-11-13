@@ -1,6 +1,6 @@
 import { Form, Icon, Input, Button, Alert } from 'antd';
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect} from 'react-router-dom' //importing redirect to take to main page
 import 'tachyons';
 
 export class LoginPage extends React.Component {
@@ -11,10 +11,12 @@ export class LoginPage extends React.Component {
     showError: false, //if should we show an error feedback message after adding a user
     errorCode: 400, //to save the errorCode we recieved from the api server
     responseStatus: "nothing", //the validation status of the email
-    errorMessage: "" //the error message to display to the user after server rejects action
+    errorMessage: "", //the error message to display to the user after server rejects action
+    redirect : false //if loggin is added successfully, redirect is set to true
   };
 
   checkResponse = (data) => {
+    console.log("before incorrect")
     if(this.state.loginSucessfully){
       console.log(data)
       sessionStorage.setItem("token", data)
@@ -22,12 +24,13 @@ export class LoginPage extends React.Component {
       this.props.form.resetFields();
       this.setState({
       showSuccess:true,
-      showError : false
-      
-      //NEED TO ROUTE AWAY IF SUCCESSFUL LOGIN TO MAIN this.history.pushState(null, 'login');... something like this
+      showError : false,
+      redirect : true
+      //NEED TO ROUTE AWAY IF SUCCESSFUL LOGIN TO MAIN this.history.pushState(null, 'accountInfo');... something like this
       });
     }else{
       //handle errors
+      console.log(data)
       this.setState({
         
       errorMessage: data,
@@ -35,6 +38,8 @@ export class LoginPage extends React.Component {
       showError : true,
       responseStatus: "error"
       });
+
+      console.log("RUNS UNTIL HERE WITH NO ERRORS")
     } 
   }
 
@@ -50,7 +55,7 @@ export class LoginPage extends React.Component {
       //NOTE IT IS ASYNC -> .then runs after fetch has finished
       //chaining promises --> .then gets the resolved promise
       //so the fetch gets the data, the then then manipulates accordingly
-
+      console.log(values)
       fetch('http://localhost:5000/api/v1.0/users', {
         method: 'POST',
         headers: {
@@ -62,16 +67,16 @@ export class LoginPage extends React.Component {
         if(res.ok){
           this.setState({loginSucessfully:true})
           console.log("Correct")
+          return res.text() //either a JWT is returned which is text
         } else{
           console.log("Incorrect")
           this.setState({
           loginSucessfully:false,
           addedSucessfully:false,
-          errorCode: res.status
-        })
-      };
-
-      return res.text() //not sure about this return
+          //errorCode: res.status
+          })
+          return res.text() //should work but error here --> but works anyway res.json() it should be
+        };
       }).then(res => this.checkResponse(res))
     }
   });
@@ -79,6 +84,9 @@ export class LoginPage extends React.Component {
 
 render() {
     const { getFieldDecorator } = this.props.form;
+    if(this.state.redirect === true){
+      return <Redirect to={{pathname: '/accountInfo'}}/>
+    }
     return (
       <article className="mw5 center bg-white br3 pa3 pa4-ns mv3 ba b--black-10">
       <Form onSubmit={this.handleSubmit}>

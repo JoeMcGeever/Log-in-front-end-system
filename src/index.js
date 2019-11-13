@@ -4,14 +4,17 @@ import './index.css'
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 import LoginPage from './components/login'
 import RegisterPage from './components/register'
+import accountInfo from './components/accountInfo'
 import 'tachyons';
 
 const routing = (
   <Router>
           <Link to="/"></Link>
           <Link to="/register"></Link>
+          <Link to="/accountInfo"></Link>
       <Route exact path="/" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />
+      <Route path="/accountInfo" component={accountInfo} />
   </Router>
 )
 ReactDOM.render(routing, document.getElementById('root'))

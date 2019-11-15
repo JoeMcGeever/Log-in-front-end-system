@@ -11,7 +11,7 @@
 //light / dark theme part
 
 import React from 'react';
-import {Form, Input, Button, Icon} from 'antd';
+import {Form, Input, Button, Alert} from 'antd';
 import { Link, Redirect} from 'react-router-dom' //importing redirect to take to main page
 
 
@@ -35,17 +35,19 @@ export class HomeGrid extends React.Component {
 
     checkResponse = (data) => {
         console.log("before incorrect")
-        if(this.state.loginSucessfully){
+        if(this.state.updatedSucessfully){
           console.log(data)
           sessionStorage.removeItem("token");
           //SET SESSION STORAGE ABOVE^
           this.props.form.resetFields();
+          this.setState({
+            redirect: true
+          })
         }else{
           //handle errors
           console.log(data)
           this.setState({
-          redirect : true,
-          errorMessage: data,
+          errorMessage: "Remember: country ID must be an integer and please enter a valid email",
           isLoaded:false,
           showError : true,
           responseStatus: "error"
@@ -78,7 +80,7 @@ export class HomeGrid extends React.Component {
             (error) => {
                 console.log(error)
                 this.setState({
-                redirect: true,
+                updatedSucessfully: true,
             });
             }
         )
@@ -142,6 +144,7 @@ export class HomeGrid extends React.Component {
         return <Redirect to={{pathname: '/'}}/>
       }
       return <> 
+      {this.state.showError ? <Alert message={this.state.errorMessage} type="error" /> :null}
       <Form onSubmit={this.handleSubmit}>
       <h4>
             Username:

@@ -20,7 +20,7 @@ const routing = (
 ReactDOM.render(routing, document.getElementById('root'))
 
 //exact is so that when register is rendered, login isnt also rendered (the slash makes this behaviour)
-
+//
 
 //class App extends Component {
 //  render() {

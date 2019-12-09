@@ -1,14 +1,3 @@
-//OK:
-//You need to display:
-//Username, first name, last name, [profile image], email
-//about, date registered
-//country ID (therefore country) -> discuss how to do this.
-//okk, it has been sent from back end to front
-//NOW:
-//for country ID, we can do what happens in week 8 lab 15
-//changes state from a switch case kinda
-//see the last page, the hyperlink and then the
-//light / dark theme part
 
 import React from 'react';
 import {Form, Input, Button, Alert} from 'antd';
@@ -34,9 +23,9 @@ export class HomeGrid extends React.Component {
     }
 
     checkResponse = (data) => {
-        console.log("before incorrect")
+        
         if(this.state.updatedSucessfully){
-          console.log(data)
+
           sessionStorage.removeItem("token");
           //SET SESSION STORAGE ABOVE^
           this.props.form.resetFields();
@@ -45,7 +34,7 @@ export class HomeGrid extends React.Component {
           })
         }else{
           //handle errors
-          console.log(data)
+
           this.setState({
           errorMessage: "Remember: country ID must be an integer and please enter a valid email",
           isLoaded:false,
@@ -57,7 +46,7 @@ export class HomeGrid extends React.Component {
 
     
     componentDidMount(){
-        console.log('mounted component')
+       // console.log('mounted component')
         fetch('http://localhost:5000/api/v1.0/home/getAccountInfo', {
             headers: {
                 'Content-type': 'application/json',
@@ -78,7 +67,7 @@ export class HomeGrid extends React.Component {
             // instead of a catch() block so that we don't swallow
             // exceptions from actual bugs in components.
             (error) => {
-                console.log(error)
+                //console.log(error)
                 this.setState({
                 updatedSucessfully: true,
             });
@@ -97,7 +86,6 @@ export class HomeGrid extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if(!err){
-                console.log("Recieved:")
                 if(values.username === undefined) values.username = this.state.userDetails.username
                 if(values.firstName === undefined) values.firstName = this.state.userDetails.firstName
                 if(values.lastName === undefined) values.lastName = this.state.userDetails.lastName
@@ -105,7 +93,6 @@ export class HomeGrid extends React.Component {
                 if(values.about === undefined) values.about = this.state.userDetails.about
                 if(values.countryID === undefined) values.countryID = this.state.userDetails.countryID
                 if(values.profileImageURL === undefined) values.profileImageURL = this.state.userDetails.profileImageURL
-                console.log(values)
                 //if any of these are undefined -> set to be the default sent within the state {userDetails}
                 //then send an PUT request to api with all of these parameters in
                 fetch('http://localhost:5000/api/v1.0/home/updateInfo', {
@@ -122,10 +109,10 @@ export class HomeGrid extends React.Component {
                           updatedSucessfully:true,
                           editMode: false
                         })
-                      console.log("Success")
+                      //console.log("Success")
                       return true //update success
                     } else{
-                      console.log("Fail")
+                      //console.log("Fail")
                       this.setState({
                       editMode: false,
                       updatedSucessfully:false,

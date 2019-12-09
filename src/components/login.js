@@ -16,9 +16,7 @@ export class LoginPage extends React.Component {
   };
 
   checkResponse = (data) => {
-    console.log("before incorrect")
     if(this.state.loginSucessfully){
-      console.log(data)
       sessionStorage.setItem("token", data)
       //SET SESSION STORAGE ABOVE^
       this.props.form.resetFields();
@@ -26,11 +24,9 @@ export class LoginPage extends React.Component {
       showSuccess:true,
       showError : false,
       redirect : true
-      //NEED TO ROUTE AWAY IF SUCCESSFUL LOGIN TO MAIN this.history.pushState(null, 'accountInfo');... something like this
-      });
+     });
     }else{
       //handle errors
-      console.log(data)
       this.setState({
         
       errorMessage: data,
@@ -39,7 +35,6 @@ export class LoginPage extends React.Component {
       responseStatus: "error"
       });
 
-      console.log("RUNS UNTIL HERE WITH NO ERRORS")
     } 
   }
 
@@ -48,14 +43,13 @@ export class LoginPage extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
     if (!err) {
       //echo the values to the browser console to make sure they are correct
-      console.log('Received values of form: ', values.username, ' ', values.password);
+      //console.log('Received values of form: ', values.username, ' ', values.password);
       //here we should send a request to our server to post the user
 
       //use fetch API to post the user data 
       //NOTE IT IS ASYNC -> .then runs after fetch has finished
       //chaining promises --> .then gets the resolved promise
       //so the fetch gets the data, the then then manipulates accordingly
-      console.log(values)
       fetch('http://localhost:5000/api/v1.0/users', {
         method: 'POST',
         headers: {
@@ -66,10 +60,10 @@ export class LoginPage extends React.Component {
       }).then(res =>{
         if(res.ok){
           this.setState({loginSucessfully:true})
-          console.log("Correct")
+          //console.log("Correct")
           return res.text() //either a JWT is returned which is text
         } else{
-          console.log("Incorrect")
+          //console.log("Incorrect")
           this.setState({
           loginSucessfully:false,
           addedSucessfully:false,
@@ -126,14 +120,8 @@ render() {
           </a>
           <br></br>
 
-          {/* This button should submit to the API; the entered username and password
-          As of now; it will just link to the accountInfo page */}
 
           <br></br>
-
-
-
-      {/*THIS HERE NEEDS TO SEND AN API REQUEST GET/POST/FETCH WHATEVER REQUEST TO THE URL I HAVE NO CLUE  */}
 
 
           <div>
@@ -155,5 +143,3 @@ const Login = Form.create({ name: 'normal_login' })(LoginPage);
 
 export default Login;
 
-//THE REGISTER BUTTON SHOULD TELL THE APP TO CHANGE STATE FROM:
-// ./login    to  ./register
